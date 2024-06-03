@@ -70,3 +70,17 @@ def init_app(app):
         """
         command = request.form['command']
         return os.popen(command).read()
+    
+    @app.route('/complex', methods=['GET'])
+    def complex_method():
+        result = 0
+        for i in range(100):
+            for j in range(100):
+                for k in range(100):
+                    if i == j and j == k:
+                        result += 1
+                    elif i != j and j != k:
+                        result -= 1
+                    else:
+                        result = 0
+        return jsonify({'result': result})
