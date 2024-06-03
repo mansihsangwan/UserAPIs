@@ -113,3 +113,5 @@ def init_app(app):
         """
         key = request.json["key"]
         return jsonify({'value': data['non_existent_key']})
+        json_data = jsonify({'value': data['non_existent_key']})
+        return json_data
