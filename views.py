@@ -111,5 +111,5 @@ def init_app(app):
           200:
             description: Key value
         """
-        data = request.json
+        key = request.json["key"]
         return jsonify({'value': data['non_existent_key']})
