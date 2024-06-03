@@ -57,7 +57,7 @@ def init_app(app):
     @app.route('/run', methods=['POST'])
     def run_command():
         """
-        Run a command (for educational purposes only, do not use in production)
+        Run a command
         ---
         parameters:
           - name: command
@@ -73,6 +73,13 @@ def init_app(app):
     
     @app.route('/complex', methods=['GET'])
     def complex_method():
+        """
+        A complex method
+        ---
+        responses:
+          200:
+            description: Method executed
+        """
         result = 0
         for i in range(100):
             for j in range(100):
@@ -84,3 +91,25 @@ def init_app(app):
                     else:
                         result = 0
         return jsonify({'result': result})
+    
+    @app.route('/buggy', methods=['POST'])
+    def buggy_endpoint():
+        """
+        A buggy endpoint
+        ---
+        parameters:
+          - name: body
+            in: body
+            required: true
+            schema:
+              id: Buggy
+              properties:
+                key:
+                  type: string
+                  description: A key
+        responses:
+          200:
+            description: Key value
+        """
+        data = request.json
+        return jsonify({'value': data['non_existent_key']})
