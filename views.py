@@ -116,13 +116,13 @@ def init_app(app):
         json_data = jsonify({'value': data['non_existent_key']})
         return json_data
     
-    @app.route('/unsafe_user/<user_id>', methods=['GET'])
-    def unsafe_get_user(user_id):
+    @app.route('/unsafe_user/<username>', methods=['GET'])
+    def unsafe_get_user(username):
             """
             Get a user by ID (unsafe version)
             ---
             parameters:
-              - name: user_id
+              - name: username
                 in: path
                 type: string
                 required: true
@@ -130,8 +130,50 @@ def init_app(app):
                 200:
                     description: User found
             """
-            result = db.engine.execute(f'SELECT * FROM user WHERE id = {user_id}')
+            result = db.engine.execute(f'SELECT * FROM user WHERE id = {username}')
             first_result = result.first()
             if first_result is None:
                     return jsonify({'error': 'User not found'}), 404
             return jsonify({'username': first_result.username, 'email': first_result.email})
+    
+    @app.route('/files/<filename>', methods=['GET'])
+    def get_file(filename):
+            """
+            Get a file by filename (unsafe version)
+            ---
+            parameters:
+              - name: filename
+                in: path
+                type: string
+                required: true
+            responses:
+                200:
+                    description: File content
+            """
+            with open(filename, 'r') as file:
+                    content = file.read()
+            return content
+    
+    @app.route('/comment', methods=['POST'])
+    def post_comment():
+            """
+            Post a comment (unsafe version)
+            ---
+            parameters:
+              - name: body
+                in: body
+                required: true
+                schema:
+                    id: Comment
+                    required:
+                        - text
+                    properties:
+                        text:
+                            type: string
+                            description: The comment text
+            responses:
+                200:
+                    description: Comment posted
+            """
+            comment = request.json['text']
+            return f'<h1>Thanks for your comment:</h1><p>{comment}</p>'
