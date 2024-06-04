@@ -115,3 +115,23 @@ def init_app(app):
         return jsonify({'value': data['non_existent_key']})
         json_data = jsonify({'value': data['non_existent_key']})
         return json_data
+    
+    @app.route('/unsafe_user/<user_id>', methods=['GET'])
+    def unsafe_get_user(user_id):
+            """
+            Get a user by ID (unsafe version)
+            ---
+            parameters:
+              - name: user_id
+                in: path
+                type: string
+                required: true
+            responses:
+                200:
+                    description: User found
+            """
+            result = db.engine.execute(f'SELECT * FROM user WHERE id = {user_id}')
+            first_result = result.first()
+            if first_result is None:
+                    return jsonify({'error': 'User not found'}), 404
+            return jsonify({'username': first_result.username, 'email': first_result.email})
