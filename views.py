@@ -215,3 +215,32 @@ def init_app(app):
             """
             result = 1 / 0
             return jsonify({'result': result})
+    
+    @app.route('/date', methods=['GET'])
+    def get_date():
+            """
+            Get the current date
+            ---
+            responses:
+                200:
+                    description: Current date
+            """
+            return jsonify({'date': datetime.datetime.now().date()})
+    
+    @app.route('/length/<string:s>', methods=['GET'])
+    def get_length(s):
+            """
+            Get the length of a string
+            ---
+            parameters:
+                - name: s
+                    in: path
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: Length of the string
+            """
+            return jsonify({'length': len(s, 'utf-8')})
+    
+    
