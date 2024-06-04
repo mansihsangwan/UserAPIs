@@ -177,3 +177,41 @@ def init_app(app):
             """
             comment = request.json['text']
             return f'<h1>Thanks for your comment:</h1><p>{comment}</p>'
+    
+    @app.route('/buffer', methods=['POST'])
+    def buffer_overflow():
+            """
+            Buffer overflow (unsafe version)
+            ---
+            parameters:
+              - name: body
+                in: body
+                required: true
+                schema:
+                    id: Buffer
+                    required:
+                        - input
+                    properties:
+                        input:
+                            type: string
+                            description: The input to store
+            responses:
+                200:
+                    description: Input stored
+            """
+            buffer = ' ' * 100
+            input = request.json['input']
+            buffer = input
+            return jsonify({'message': 'Input stored'})
+    
+    @app.route('/exception', methods=['GET'])
+    def unhandled_exception():
+            """
+            Unhandled exception
+            ---
+            responses:
+                200:
+                    description: Result
+            """
+            result = 1 / 0
+            return jsonify({'result': result})
