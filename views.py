@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, send_file
 from flasgger import Swagger
 from models import db, User
 import os
@@ -130,7 +130,7 @@ def init_app(app):
                 200:
                     description: User found
             """
-            result = db.engine.execute(f'SELECT * FROM user WHERE id = {username}')
+            result = db.engine.execute(f'SELECT * FROM user WHERE username = {username}')
             first_result = result.first()
             if first_result is None:
                     return jsonify({'error': 'User not found'}), 404
@@ -256,3 +256,31 @@ def init_app(app):
     def divide():
         return None
     
+
+    @app.route('/unsafe/<username>/<filename>', methods=['GET'])
+    def unsafe_method(username, filename):
+            """
+            An unsafe method (for educational purposes only, do not use in production)
+            ---
+            parameters:
+                - name: username
+                    in: path
+                    type: string
+                    required: true
+                - name: filename
+                    in: path
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: User found and file sent
+            """
+            # SQL Injection vulnerability
+            result = db.engine.execute(f"SELECT * FROM users WHERE username = '{username}'")
+            first_result = result.first()
+            if first_result is None:
+                    return jsonify({'error': 'User not found'}), 404
+
+            # Path Traversal vulnerability
+            file_path = os.path.join('/uploads', filename)
+            return send_file(file_path)  
