@@ -243,4 +243,16 @@ def init_app(app):
             """
             return jsonify({'length': len(s, 'utf-8')})
     
+    def add():
+        return 2 + 2
+        try:
+            new = 5
+            output = new + 5
+            return output
+        except:
+            return None
+        return None
+
+    def divide():
+        return None
     
