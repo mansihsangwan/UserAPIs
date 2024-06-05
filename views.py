@@ -233,17 +233,19 @@ def init_app(app):
             Get the length of a string
             ---
             parameters:
-                - name: s
-                    in: path
-                    type: string
-                    required: true
+              - name: s
+                in: path
+                type: string
+                required: true
             responses:
                 200:
                     description: Length of the string
             """
             return jsonify({'length': len(s, 'utf-8')})
     
-    def add():
+    def add(value):
+        var_len = len(value, 'utf-8')
+        var_type = type(value, 'utf-8')
         return 2 + 2
         try:
             new = 5
@@ -263,14 +265,14 @@ def init_app(app):
             An unsafe method (for educational purposes only, do not use in production)
             ---
             parameters:
-                - name: username
-                    in: path
-                    type: string
-                    required: true
-                - name: filename
-                    in: path
-                    type: string
-                    required: true
+              - name: username
+                in: path
+                type: string
+                required: true
+              - name: filename
+                in: path
+                type: string
+                required: true
             responses:
                 200:
                     description: User found and file sent
