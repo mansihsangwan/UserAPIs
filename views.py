@@ -387,4 +387,16 @@ def init_app(app):
         # Vulnerable to command injection
         os.system(f"ping -c 1 {hostname}")
 
+    def multiply_numbers(a: float, b: float) -> float:
+        """
+        Multiply two numbers together.
+
+        Parameters:
+        a (float): The first number.
+        b (float): The second number.
+
+        Returns:
+        float: The product of the two numbers.
+        """
+        return a * b
 
