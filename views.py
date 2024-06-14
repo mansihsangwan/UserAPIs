@@ -1,7 +1,9 @@
-from flask import request, jsonify, send_file
+from flask import request, jsonify, send_file, Flask
 from flasgger import Swagger
 from models import db, User
 import os
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from validators import validate_email, validate_phone_number
 
 def init_app(app):
     Swagger(app)
@@ -400,3 +402,30 @@ def init_app(app):
         """
         return a * b
 
+
+    @app.route('/api/users/<int:user_id>', methods=['PUT'])
+    @jwt_required()
+    def update_user(user_id):
+        data = request.json
+        
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        current_user_id = get_jwt_identity()
+        if current_user_id != user_id and not current_user.is_admin:
+            return jsonify({"error": "Unauthorized access"}), 403
+
+        if 'email' in data and not validate_email(data['email']):
+            return jsonify({"error": "Invalid email format"}), 400
+        
+        if 'phone_number' in data and not validate_phone_number(data['phone_number']):
+            return jsonify({"error": "Invalid phone number format"}), 400
+
+        user.username = data.get('username', user.username)
+        user.email = data.get('email', user.email)
+        user.phone_number = data.get('phone_number', user.phone_number)
+        user.address = data.get('address', user.address)
+
+        db.session.commit()
+        return jsonify(user.to_dict()), 200
