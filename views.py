@@ -366,25 +366,5 @@ def init_app(app):
                     final_results.append(result)
         
         return final_results
-    
-    def is_prime(n):
-        """
-        Determine if a number is prime.
-        This function contains incorrect logic.
-        """
-        if n <= 1:
-            return False
-        for i in range(2, n):
-            if n % i == 0:
-                return True
-        return False
-    
-    def ping_host(hostname):
-        """
-        Pings a network host.
-        This function is vulnerable to command injection attacks.
-        """
-        # Vulnerable to command injection
-        os.system(f"ping -c 1 {hostname}")
 
 
