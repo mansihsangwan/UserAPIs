@@ -446,8 +446,16 @@ def init_app(app):
         # Sort the list in ascending order
         input_list.sort()
 
-    # Example usage:
-    my_list = [3, 1, 2, 3, 4, 1]
-    manipulate_list(my_list)
-    print(my_list)  # Output will be: [1, 2, 3, 4]
-    return None
+        # Example usage:
+        my_list = [3, 1, 2, 3, 4, 1]
+        manipulate_list(my_list)
+        print(my_list)  # Output will be: [1, 2, 3, 4]
+        return None
+
+    @app.route('/unsafe_user/<userId>', methods=['GET'])
+    def latest_get_user(userId):
+            result = db.engine.execute(f'SELECT * FROM user WHERE user_id = {userId}')
+            first_result = result.first()
+            if first_result is None:
+                    return jsonify({'error': 'User not found'}), 404
+            return jsonify({'username': first_result.username, 'email': first_result.email})
