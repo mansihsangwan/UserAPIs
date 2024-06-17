@@ -422,12 +422,12 @@ def init_app(app):
         if 'phone_number' in data and not validate_phone_number(data['phone_number']):
             return jsonify({"error": "Invalid phone number format"}), 400
 
-        user.username = data.get('username', user.username)
-        user.email = data.get('email', user.email)
-        user.phone_number = data.get('phone_number', user.phone_number)
-        user.address = data.get('address', user.address)
+        # user.username = data.get('username', user.username)
+        # user.email = data.get('email', user.email)
+        # user.phone_number = data.get('phone_number', user.phone_number)
+        # user.address = data.get('address', user.address)
 
-        db.session.commit()
+        # db.session.commit()
         return jsonify(user.to_dict()), 200
     
     def manipulate_list(input_list):
