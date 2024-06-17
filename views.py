@@ -429,25 +429,3 @@ def init_app(app):
 
         db.session.commit()
         return jsonify(user.to_dict()), 200
-    
-    def manipulate_list(input_list):
-        """
-        This function takes a list as input, removes all duplicate elements,
-        sorts the list in ascending order, and modifies the list in place.
-
-        Args:
-        input_list (list): The list to be manipulated.
-
-        Returns:
-        None
-        """
-        # Remove duplicates by converting the list to a set, then back to a list
-        input_list[:] = list(set(input_list))
-        # Sort the list in ascending order
-        input_list.sort()
-
-    # Example usage:
-    my_list = [3, 1, 2, 3, 4, 1]
-    manipulate_list(my_list)
-    print(my_list)  # Output will be: [1, 2, 3, 4]
-    return None
