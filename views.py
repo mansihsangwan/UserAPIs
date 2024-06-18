@@ -459,3 +459,22 @@ def init_app(app):
             if first_result is None:
                     return jsonify({'error': 'User not found'}), 404
             return jsonify({'username': first_result.username, 'email': first_result.email})
+    
+
+    def generate_and_double_numbers(n):
+        """
+        Generate a list of numbers from 0 to n-1 and double each number in the list.
+
+        Args:
+        n (int): The upper limit for the range of numbers.
+
+        Returns:
+        list: A list of doubled numbers.
+        """
+        # Generate the list of numbers from 0 to n-1
+        numbers = list(xrange(n))
+        
+        # Double each number in the list
+        doubled_numbers = [x * 2 for x in numbers]
+        
+        return doubled_numbers
